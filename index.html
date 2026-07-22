@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis 15 Años | Camila Ximena</title>
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Iconos FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --wine-deepest: #1a0205;
+            --wine-dark: #320408;
+            --wine-medium: #701c24;
+            --gold-primary: #efb810;
+            --gold-light: #f9db5c;
+            --disco-pink: #ff2a8d;
+            --disco-cyan: #00f0ff;
+            --disco-purple: #9d00ff;
+            
+            --font-title: 'Cinzel', serif;
+            --font-script: 'Great Vibes', cursive;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--wine-deepest);
+            color: #ffffff;
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Bandas de Cine (Efecto Letterbox tipo Película) */
+        .cinema-bar {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 0vh;
+            background: #000;
+            z-index: 10000;
+            transition: height 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            pointer-events: none;
+        }
+        .cinema-bar.top { top: 0; }
+        .cinema-bar.bottom { bottom: 0; }
+
+        body.cinematic-active .cinema-bar {
+            height: 12vh;
+        }
+
+        /* Pantalla de Apertura de Sobre */
+        #welcome-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, var(--wine-dark) 0%, var(--wine-deepest) 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #welcome-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .instruction-box {
+            text-align: center;
+            margin-bottom: 25px;
+            animation: pulse-instruction 2s infinite ease-in-out;
+        }
+
+        .instruction-box h2 {
+            font-family: var(--font-title);
+            color: var(--gold-light);
+            font-size: 1.15rem;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(239, 184, 16, 0.5);
+        }
+
+        .instruction-box p {
+            font-family: var(--font-body);
+            color: #f2e8e8;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        @keyframes pulse-instruction {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 1; }
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            cursor: pointer;
+            perspective: 1000px;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.02);
+        }
+
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine-deepest) 100%);
+            border: 2px solid var(--gold-primary);
+            border-radius: 0 0 10px 10px;
+            z-index: 3;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid var(--wine-medium);
+            transform-origin: top;
+            transition: transform 0.8s ease;
+            z-index: 4;
+            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.4));
+        }
+
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 105px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55px;
+            height: 55px;
+            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 70%, #b8860b 100%);
+            border-radius: 50%;
+            border: 2px dashed #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            box-shadow: 0 0 15px var(--disco-pink);
+            font-family: var(--font-title);
+            color: var(--wine-deepest);
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .envelope-container.open .wax-seal {
+            transform: translateX(-50%) scale(0);
+            opacity: 0;
+        }
+
+        .letter-paper {
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            right: 15px;
+            height: 140px;
+            background: #fff8e8;
+            color: var(--wine-deepest);
+            border-radius: 6px;
+            padding: 20px 15px;
+            text-align: center;
+            z-index: 2;
+            transition: transform 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope-container.open .letter-paper {
+            transform: translateY(-115px);
+            z-index: 4;
+        }
+
+        .letter-paper h3 {
+            font-family: var(--font-title);
+            font-size: 1rem;
+            color: var(--wine-dark);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .letter-paper p {
+            font-size: 0.75rem;
+            color: #555;
+            font-family: var(--font-body);
+        }
+
+        /* Fondo Disco Glam con Focos Dinámicos */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 25%, rgba(112, 28, 36, 0.4) 0%, var(--wine-deepest) 85%);
+            z-index: -2;
+        }
+
+        .spotlights {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.4;
+        }
+
+        .spotlight {
+            position: absolute;
+            top: -50%;
+            width: 250px;
+            height: 150vh;
+            background: linear-gradient(to bottom, rgba(255, 42, 141, 0.15), transparent);
+            transform-origin: top center;
+            animation: move-spotlight 8s infinite alternate ease-in-out;
+        }
+
+        .spotlight:nth-child(2) {
+            left: 30%;
+            background: linear-gradient(to bottom, rgba(0, 240, 255, 0.15), transparent);
+            animation-duration: 10s;
+            animation-direction: alternate-reverse;
+        }
+
+        .spotlight:nth-child(3) {
+            left: 70%;
+            background: linear-gradient(to bottom, rgba(239, 184, 16, 0.15), transparent);
+            animation-duration: 12s;
+        }
+
+        @keyframes move-spotlight {
+            0% { transform: rotate(-25deg); }
+            100% { transform: rotate(25deg); }
+        }
+
+        .disco-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(var(--gold-light) 1.5px, transparent 1.5px);
+            background-size: 35px 35px;
+            opacity: 0.2;
+            z-index: -1;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(1); }
+            100% { opacity: 0.3; transform: scale(1.05); }
+        }
+
+        /* Bola de Disco Estilizada 3D */
+        .disco-ball-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .disco-wire {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, transparent, var(--gold-primary));
+        }
+
+        .disco-ball {
+            width: 75px;
+            height: 75px;
+            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #888888 40%, #111111 80%);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 42, 141, 0.5), 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(255,255,255,0.9);
+            animation: swing 4s ease-in-out infinite alternate;
+            overflow: hidden;
+        }
+
+        .disco-ball::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.4) 1px, transparent 1px);
+            background-size: 7px 7px;
+            border-radius: 50%;
+            animation: rotate-mirror 5s linear infinite;
+        }
+
+        @keyframes rotate-mirror {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 28px; }
+        }
+
+        @keyframes swing {
+            0% { transform: rotate(-6deg); transform-origin: top center; }
+            100% { transform: rotate(6deg); transform-origin: top center; }
+        }
+
+        .disco-flare {
+            position: absolute;
+            top: 60px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, transparent 70%);
+            pointer-events: none;
+            animation: flare-anim 3.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes flare-anim {
+            0% { transform: scale(0.7) translateX(-20px); opacity: 0.3; }
+            100% { transform: scale(1.4) translateX(20px); opacity: 0.8; }
+        }
+
+        /* Reproductor de Música con Ecualizador Animado Estilo Disco */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(26, 2, 5, 0.95);
+            border: 2px solid var(--disco-pink);
+            border-radius: 50px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(255, 42, 141, 0.6);
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .music-player i {
+            color: var(--disco-cyan);
+            font-size: 1.1rem;
+        }
+
+        .music-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .music-player span {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: var(--gold-light);
+            font-family: var(--font-title);
+        }
+
+        /* Animación del Ecualizador de Audio */
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 14px;
+            margin-top: 2px;
+        }
+
+        .eq-bar {
+            width: 3px;
+            background: var(--disco-cyan);
+            height: 4px;
+            border-radius: 2px;
+            transition: height 0.2s ease;
+        }
+
+        .equalizer.playing .eq-bar {
+            animation: bounce-eq 0.6s infinite alternate ease-in-out;
+        }
+
+        .equalizer.playing .eq-bar:nth-child(2) { animation-delay: 0.2s; }
+        .equalizer.playing .eq-bar:nth-child(3) { animation-delay: 0.4s; }
+        .equalizer.playing .eq-bar:nth-child(4) { animation-delay: 0.1s; }
+
+        @keyframes bounce-eq {
+            0% { height: 4px; }
+            100% { height: 14px; background: var(--disco-pink); }
+        }
+
+        /* Secciones Dinámicas */
+        section {
+            min-height: auto;
+            padding: 45px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gold-frame {
+            border: 2px solid var(--gold-primary);
+            padding: 25px 15px;
+            background: rgba(50, 4, 8, 0.8);
+            backdrop-filter: blur(8px);
+            box-shadow: inset 0 0 15px rgba(112, 28, 36, 0.6), 0 0 25px rgba(239, 184, 16, 0.25);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+        }
+
+        .gold-frame::after {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px solid rgba(255, 42, 141, 0.25);
+            pointer-events: none;
+            border-radius: 8px;
+        }
+
+        .subtitle {
+            font-family: var(--font-title);
+            color: var(--gold-light);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-shadow: 0 0 8px rgba(239, 184, 16, 0.4);
+        }
+
+        .main-name {
+            font-family: var(--font-script);
+            color: var(--gold-light);
+            font-size: clamp(3rem, 12vw, 5rem);
+            line-height: 1;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px rgba(255, 42, 141, 0.7), 0 0 10px rgba(239, 184, 16, 0.8);
+        }
+
+        .event-type {
+            font-family: var(--font-title);
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            letter-spacing: 3px;
+            color: #fff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .date-badge {
+            display: inline-block;
+            border-top: 1px solid var(--disco-cyan);
+            border-bottom: 1px solid var(--disco-cyan);
+            padding: 8px 18px;
+            font-family: var(--font-title);
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            color: var(--gold-light);
+            margin-top: 10px;
+            background: rgba(26, 2, 5, 0.6);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        /* Galería */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .photo-slot {
+            aspect-ratio: 4/5;
+            border: 1px dashed var(--disco-pink);
+            border-radius: 8px;
+            background: rgba(26, 2, 5, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(255, 42, 141, 0.15);
+        }
+
+        .photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        .photo-slot i {
+            font-size: 1.8rem;
+            color: var(--disco-pink);
+            margin-bottom: 5px;
+            opacity: 0.8;
+            text-shadow: 0 0 8px rgba(255, 42, 141, 0.5);
+        }
+
+        .photo-slot span {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: var(--gold-light);
+            font-family: var(--font-title);
+            text-transform: uppercase;
+        }
+
+        /* Cuenta Regresiva */
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .time-box {
+            background: rgba(26, 2, 5, 0.85);
+            border: 1px solid var(--disco-cyan);
+            padding: 8px 10px;
+            border-radius: 6px;
+            min-width: 65px;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .time-number {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            font-weight: 700;
+        }
+
+        .time-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #d1a19e;
+            margin-top: 2px;
+        }
+
+        /* Itinerario */
+        .events-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .event-card {
+            background: rgba(50, 4, 8, 0.8);
+            border: 1px solid var(--gold-primary);
+            padding: 20px 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .event-card i.icon-main {
+            font-size: 1.8rem;
+            color: var(--disco-pink);
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(255, 42, 141, 0.6);
+        }
+
+        .event-card h3 {
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            color: var(--gold-light);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .event-card p {
+            font-size: 0.85rem;
+            color: #f0e6e6;
+            margin-bottom: 4px;
+        }
+
+        .map-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: transparent;
+            border: 1px solid var(--disco-cyan);
+            color: var(--disco-cyan);
+            text-decoration: none;
+            font-family: var(--font-title);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+        }
+
+        .map-btn:hover {
+            background: var(--disco-cyan);
+            color: var(--wine-deepest);
+            box-shadow: 0 0 15px var(--disco-cyan);
+        }
+
+        /* Familia y Padrinos */
+        .family-section p {
+            font-size: 0.95rem;
+            color: #f2e8e8;
+        }
+
+        .family-section .names {
+            font-family: var(--font-title);
+            color: var(--gold-light);
+            font-size: 1rem;
+            margin-top: 2px;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Código de Vestimenta */
+        .dresscode-icon {
+            font-size: 2.2rem;
+            color: var(--disco-cyan);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--disco-cyan);
+        }
+
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .color-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 0 8px rgba(255,255,255,0.3);
+        }
+
+        .dot-gold { background-color: #efb810; }
+        .dot-wine { background-color: #701c24; }
+        .dot-white { background-color: #ffffff; }
+
+        .restriction-box {
+            background: rgba(26, 2, 5, 0.85);
+            border-left: 3px solid var(--disco-pink);
+            padding: 10px;
+            margin-top: 12px;
+            font-size: 0.78rem;
+            text-align: left;
+            color: #ffd1cc;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* RSVP */
+        .rsvp-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: var(--disco-pink);
+            color: #ffffff;
+            text-decoration: none;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            box-shadow: 0 0 20px rgba(255, 42, 141, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .rsvp-btn:hover {
+            background: var(--gold-primary);
+            color: var(--wine-deepest);
+            box-shadow: 0 0 20px var(--gold-primary);
+        }
+
+        /* Pie de página */
+        footer {
+            padding: 25px 15px 35px 15px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 42, 141, 0.3);
+            background: rgba(12, 1, 3, 0.95);
+            margin-top: 20px;
+        }
+
+        .developer-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(50, 4, 8, 0.6);
+            border: 1px solid var(--gold-primary);
+            padding: 6px 15px;
+            border-radius: 30px;
+            box-shadow: 0 0 10px rgba(239, 184, 16, 0.2);
+        }
+
+        .developer-logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--gold-light);
+        }
+
+        .developer-box span {
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: var(--gold-light);
+            font-family: var(--font-title);
+        }
+    </style>
+</head>
+<body class="cinematic-active">
+
+    <!-- Bandas de Cine -->
+    <div class="cinema-bar top"></div>
+    <div class="cinema-bar bottom"></div>
+
+    <!-- SOBRE DE CARTA / ANIMACIÓN DE APERTURA -->
+    <div id="welcome-overlay">
+        <div class="instruction-box">
+            <h2>Estás Invitado</h2>
+            <p>Toca el sobre para abrir tu invitación</p>
+        </div>
+        <div class="envelope-container" id="envelopeBox">
+            <div class="envelope-flap"></div>
+            <div class="wax-seal">15</div>
+            <div class="letter-paper">
+                <h3>Camila Ximena</h3>
+                <p>Mis 15 Años</p>
+            </div>
+            <div class="envelope-body"></div>
+        </div>
+    </div>
+
+    <!-- Efectos de Luces y Pista Disco -->
+    <div class="spotlights">
+        <div class="spotlight"></div>
+        <div class="spotlight"></div>
+        <div class="spotlight"></div>
+    </div>
+    <div class="disco-particles"></div>
+
+    <!-- Reproductor de Música Discoteca con Ecualizador Visual -->
+    <div class="music-player" id="musicToggle" title="Reproducir / Pausar Música Disco">
+        <i class="fas fa-music"></i>
+        <div class="music-info">
+            <span id="musicText">DISCO BEAT</span>
+            <div class="equalizer" id="eqBars">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+        </div>
+        <audio id="bgMusic" loop>
+            <!-- Asegúrate de colocar un enlace directo a un archivo .mp3 instrumental de música disco -->
+            <source src="audio/cancion-disco.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
+    </div>
+
+    <!-- SECCIÓN 1: PORTADA -->
+    <section id="portada">
+        <div class="gold-frame">
+            <!-- Bola de Disco Animada Estilizada -->
+            <div class="disco-ball-container">
+                <div class="disco-wire"></div>
+                <div class="disco-ball"></div>
+                <div class="disco-flare"></div>
+            </div>
+            <p class="subtitle">Mis 15 Años</p>
+            <h1 class="main-name">Camila Ximena</h1>
+            <p class="event-type">Studio 15 • Disco Glam</p>
+            <div class="date-badge">19 • SEPTIEMBRE • 2026</div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: ESPACIO PARA FOTOS DE LA QUINCEAÑERA -->
+    <section id="fotos">
+        <div class="gold-frame">
+            <h2 class="subtitle">Momentos Especiales</h2>
+            <div class="photo-grid">
+                <div class="photo-slot">
+                    <i class="fas fa-camera"></i>
+                    <span>Foto 1</span>
+                    <!-- <img src="ruta/foto1.jpg" alt="Camila 1"> -->
+                </div>
+                <div class="photo-slot">
+                    <i class="fas fa-camera"></i>
+                    <span>Foto 2</span>
+                    <!-- <img src="ruta/foto2.jpg" alt="Camila 2"> -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: CUENTA REGRESIVA -->
+    <section id="cuenta-regresiva">
+        <div class="gold-frame">
+            <h2 class="subtitle">Falta muy poco</h2>
+            <div class="countdown-grid" id="countdown">
+                <div class="time-box">
+                    <span class="time-number" id="days">00</span>
+                    <span class="time-label">Días</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-number" id="hours">00</span>
+                    <span class="time-label">Horas</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-number" id="minutes">00</span>
+                    <span class="time-label">Min.</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-number" id="seconds">00</span>
+                    <span class="time-label">Seg.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 4: CEREMONIA Y RECEPCIÓN -->
+    <section id="itinerario">
+        <div class="events-container">
+            <div class="event-card">
+                <i class="fas fa-church icon-main"></i>
+                <h3>Ceremonia Religiosa</h3>
+                <p><strong>Hora:</strong> 4:00 PM</p>
+                <p><strong>Lugar:</strong> Iglesia del Centro</p>
+                <a href="https://maps.app.goo.gl/hrPchBJGh4z9ttwx9" target="_blank" class="map-btn">
+                    <i class="fas fa-map-marker-alt"></i> Ver Ubicación
+                </a>
+            </div>
+
+            <div class="event-card">
+                <i class="fas fa-glass-cheers icon-main"></i>
+                <h3>Recepción / Fiesta</h3>
+                <p><strong>Hora:</strong> 5:00 PM</p>
+                <p><strong>Lugar:</strong> Salón Casa las Cabañas</p>
+                <a href="https://www.google.com/maps/place/Casa+las+caba%C3%B1as/@18.8931207,-100.1285978,3a,16.4y,342.29h,86.13t/data=!3m7!1e1!3m5!1s3KOTpIXBkHC1GfhT38NyTA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D3.8655819783013357%26panoid%3D3KOTpIXBkHC1GfhT38NyTA%26yaw%3D342.2860411566035!7i16384!8i8192!4m6!3m5!1s0x85cd13c5b854ebb7:0xff3b6581c492f91!8m2!3d18.8925135!4d-100.1315494!16s%2Fg%2F11kpkbr9_t?entry=ttu&g_ep=EgoyMDI2MDcyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="map-btn">
+                    <i class="fas fa-map-marker-alt"></i> Ver Ubicación
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 5: FAMILIA Y PADRINOS -->
+    <section id="familia">
+        <div class="gold-frame family-section">
+            <h2 class="subtitle">Mis Padres y Padrinos</h2>
+            <p style="margin-top: 5px;">Padres:</p>
+            <div class="names">Nely Hernández Morales y Arnulfo Orozco Arce</div>
+            <p>Padrinos:</p>
+            <div class="names" style="margin-bottom: 0;">Leonel Hernández Morales y Elizabeth Hernandez Ramos</div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 6: CÓDIGO DE VESTIMENTA -->
+    <section id="vestimenta">
+        <div class="gold-frame">
+            <i class="fas fa-tshirt dresscode-icon"></i>
+            <h2 class="subtitle">Código de Vestimenta</h2>
+            <div class="event-type" style="font-size: 1rem; margin-bottom: 5px;">Formal / Estilo Disco</div>
+            
+            <div class="color-palette">
+                <div class="color-dot dot-gold" title="Dorado"></div>
+                <div class="color-dot dot-wine" title="Vino"></div>
+                <div class="color-dot dot-white" title="Blanco"></div>
+            </div>
+
+            <div class="restriction-box">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Nota:</strong> Prohibido llevar prendas en color rojo o vino (exclusivo de la quinceañera).
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 7: RSVP -->
+    <section id="rsvp">
+        <div class="gold-frame">
+            <h2 class="subtitle">Confirmación (RSVP)</h2>
+            <p style="margin: 10px 0; color: #f0e6e6; font-size: 0.85rem;">
+                Confirma antes del <strong>05 de Septiembre de 2026</strong>
+            </p>
+            <a href="https://wa.me/?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20los%2015%20años%20de%20Camila%20Ximena." target="_blank" class="rsvp-btn">
+                <i class="fab fa-whatsapp"></i> Confirmar por WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <div class="developer-box">
+            <img src="ruta/logo-dev.png" alt="Logo DevNick" class="developer-logo" onerror="this.style.display='none'">
+            <span>Desarrollado por DevNick</span>
+        </div>
+    </footer>
+
+    <script>
+        const envelopeBox = document.getElementById('envelopeBox');
+        const welcomeOverlay = document.getElementById('welcome-overlay');
+        const bgMusic = document.getElementById('bgMusic');
+        const eqBars = document.getElementById('eqBars');
+        const musicText = document.getElementById('musicText');
+        const musicToggle = document.getElementById('musicToggle');
+        
+        let isPlaying = false;
+        let autoScrolling = false;
+        let scrollInterval;
+
+        envelopeBox.addEventListener('click', () => {
+            envelopeBox.classList.add('open');
+
+            setTimeout(() => {
+                welcomeOverlay.classList.add('hidden');
+                document.body.classList.remove('cinematic-active');
+
+                document.getElementById('portada').classList.add('visible');
+
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    eqBars.classList.add('playing');
+                    musicText.textContent = "EN VIVO";
+                }).catch(e => console.log("Audio play interaction needed", e));
+
+                startAutoScroll();
+            }, 900);
+        });
+
+        musicToggle.addEventListener('click', () => {
+            if (!isPlaying) {
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    eqBars.classList.add('playing');
+                    musicText.textContent = "EN VIVO";
+                });
+            } else {
+                bgMusic.pause();
+                isPlaying = false;
+                eqBars.classList.remove('playing');
+                musicText.textContent = "PAUSADO";
+            }
+        });
+
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => observer.observe(section));
+
+        function startAutoScroll() {
+            autoScrolling = true;
+            let speed = 1.0; 
+            scrollInterval = setInterval(() => {
+                if (autoScrolling) {
+                    window.scrollBy(0, speed);
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
+                        stopAutoScroll();
+                    }
+                }
+            }, 25);
+        }
+
+        function stopAutoScroll() {
+            if (autoScrolling) {
+                autoScrolling = false;
+                clearInterval(scrollInterval);
+            }
+        }
+
+        window.addEventListener('wheel', stopAutoScroll, { passive: true });
+        window.addEventListener('touchstart', stopAutoScroll, { passive: true });
+        window.addEventListener('mousedown', stopAutoScroll, { passive: true });
+        window.addEventListener('keydown', stopAutoScroll, { passive: true });
+
+        const eventDate = new Date("September 19, 2026 16:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) return;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
